@@ -1,0 +1,14 @@
+/* CSS declarations go here */
+.vis-label{
+	fill-opacity:0;
+}
+
+.vis-label:hover{
+	fill-opacity:1;
+}
+.fv{
+    
+}
+.int{
+    
+}

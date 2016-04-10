@@ -1,10 +1,23 @@
 {
-  "name": "PersonalFinances",
+  "name": "personalfinances",
   "private": true,
   "scripts": {
     "start": "meteor run"
   },
   "dependencies": {
     "meteor-node-stubs": "~0.2.0"
-  }
+  },
+  "description": "A webapp to track and learn about managing personal finances",
+  "version": "1.0.0",
+  "main": "server/main.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jm1200/PersonalFinances.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jm1200/PersonalFinances/issues"
+  },
+  "homepage": "https://github.com/jm1200/PersonalFinances#readme"
 }
