@@ -1,3 +1,8 @@
+Meteor.subscribe("StockSums");
+Meteor.subscribe("StockTotal");
+Meteor.subscribe("StockAccounts");
+Meteor.subscribe("Stocks");
+
 Template.StocksMain.events({
     'click .stock-submit': function () {
         Meteor.call('stock', "VCN.TO", function (err, result) {

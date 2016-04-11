@@ -1,4 +1,4 @@
-Template.Options.events({
+Template.AddStock.events({
     //Look up stock to display inside modal
     'click .stock-lookup': function () {
         event.preventDefault;
@@ -37,7 +37,7 @@ Template.Options.events({
     }
 });
 
-Template.Options.helpers({
+Template.AddStock.helpers({
     //display stock inside modal
     stock: function () {
         if (Session.get('stock')) {

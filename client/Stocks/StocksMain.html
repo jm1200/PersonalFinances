@@ -1,40 +1,32 @@
 <template name="StocksMain">
     <div class="container">
+       
         <div class="row">
             <h1>Stock Portfolio</h1>
         </div>
-        <div class="row">
-            <!--  Portfolio Summary Section-->
+        
+        <!--  Portfolio Summary Section-->
+        <div class="row">  
             {{>StocksTotal}}
         </div>
+        
+        <!--  Portfolio Buttons and Tools-->
         <div class="row">
-            <!--  Portfolio Buttons and Tools-->
- 
-            {{>Options}}
-            <!--
-<br /> {{>ColumnVisSel}}
--->
+            {{>AddStock}}
+            <!-- <br /> {{>ColumnVisSel}}-->
         </div>
+          
+        <!--  Tables-->      
         <div class="row">
-            <!--  Tables-->
-            <h3>Tables</h3> 
-<!--            {{>StocksTable}}-->
+            
+            <h3>Tables</h3>
+            <!--            {{>StocksTable}}-->
         </div>
+        
+        <!--  Graphs-->
         <div class="row">
-            <!--  Graphs-->
-            <h3>Graphs</h3> 
+            
+            <h3>Graphs</h3>
         </div>
-
-
-
-
-
-
-
-        <!--
-    
-    
-    
--->
     </div>
 </template>
