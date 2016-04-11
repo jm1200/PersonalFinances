@@ -1,13 +1,40 @@
 <template name="StocksMain">
-    <h1>Stock Portfolio</h1> 
-<!--
-    {{>StocksTotal}}
-    <h3>Details and Performance</h3>
-    
-    {{>AddStock}}
-    <br />
-    {{>ColumnVisSel}}
-    
-    {{>StocksTable}}
+    <div class="container">
+        <div class="row">
+            <h1>Stock Portfolio</h1>
+        </div>
+        <div class="row">
+            <!--  Portfolio Summary Section-->
+            {{>StocksTotal}}
+        </div>
+        <div class="row">
+            <!--  Portfolio Buttons and Tools-->
+ 
+            {{>Options}}
+            <!--
+<br /> {{>ColumnVisSel}}
 -->
+        </div>
+        <div class="row">
+            <!--  Tables-->
+            <h3>Tables</h3> 
+<!--            {{>StocksTable}}-->
+        </div>
+        <div class="row">
+            <!--  Graphs-->
+            <h3>Graphs</h3> 
+        </div>
+
+
+
+
+
+
+
+        <!--
+    
+    
+    
+-->
+    </div>
 </template>

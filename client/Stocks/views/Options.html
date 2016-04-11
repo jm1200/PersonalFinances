@@ -1,0 +1,53 @@
+<template name="Options">
+    <!--    Buttons-->
+    <button class="btn btn-primary update-stocks">Update Stocks </button>
+    <!--    Display add stock button or look up stock input depending on session variable-->
+    {{#if $.Session.get "toggle-add-stock"}}
+    <input type="text" name="symbol" id="stockValue">
+    <button class="stock-lookup btn btn-primary">Look up Stock</button>
+    {{else}}
+    <button class="btn btn-primary toggle-add-stock">Add New Stock</button>
+    {{/if}}
+
+
+    <!--MODAL-->
+    <div id="myModal" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Confirm</h4>
+                </div>
+                <div class="modal-body">
+
+                    <p>Is this your stock?</p>
+                    <!--                    if stock found show the stock, else show loading-->
+                    {{#if stock}}
+                        <!--                       if stock.error is true display error message, else display stock-->
+                        {{#if stock.error}}
+                            <br />
+                            <div class="panel panel-danger">
+                                <div class="panel-heading">Oops! We couldn't find your stock!</div>
+                                <div class="panel-body">Different markets and databanks describe stock symbols in different ways. Try looking your stock up on <a href="https://ca.finance.yahoo.com/">Yahoo Finance</a>. This site uses the same symbology that Yahoo does.</div>
+                            </div>
+                        {{else}}
+                            <p>Name: {{stock.name}} </p>
+                            <p>Ask Price: {{stock.ask}} </p>
+                        {{/if}} 
+                    {{else}}
+                        <p>Loading...</p>
+                    {{/if}}
+                    <br />
+                    <button class="btn btn-success correct-stock">Yes</button>
+                    <button class="btn btn-danger wrong-stock">Try Different Symbol</button>
+                </div>
+                <div class="modal-footer">
+
+                    <button type="submit" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</template>

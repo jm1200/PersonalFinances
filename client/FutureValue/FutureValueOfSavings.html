@@ -1,4 +1,6 @@
-<template name="FutureValueOfSavings">
+<!--   MAIN TEMPLATE-->
+
+   <template name="FutureValueOfSavings">
     <h1>Future Value of Savings Calculator</h1>
     <div class="row">
         <div class="col-md-6">
@@ -10,8 +12,9 @@
     </div>
 </template>
 
+<!--INPUT FORM TEMPLATE-->
 <template name="futureValueOfSavingsInput">
-    {{>quickForm collection="Input" id="inputForm" type="normal"}}
+    {{>quickForm collection="FutureValueOfSavings" id="inputForm" type="normal" validation="keyup"}}
     <div class="row">
         <div class="col-md-6 fv text-primary">
             <div class="panel panel-primary">
@@ -36,6 +39,7 @@
     </div>
 </template>
 
+<!--GRAPH TEMPLATE-->
 <template name="futureValueOfSavingsGraphTemplate">
     <p>Hover just above each point to see details</p>
     <div id="graph">
