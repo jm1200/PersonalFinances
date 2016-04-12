@@ -1,0 +1,63 @@
+<template name="StocksTable">
+
+    <ul class="nav nav-tabs">
+        <li role="presentation" class="toggle-table{{#if $.Session.get 'table'}} active{{/if}}"><a id="tabletoggle" href="#">All Stocks</a></li>
+        <li role="presentation" class="toggle-table{{#if $.Session.get 'table1'}} active{{/if}}"><a id="tabletoggle1" href="#">Sort by Stock</a></li>
+        <li role="presentation" class="toggle-table{{#if $.Session.get 'table2'}} active{{/if}}"><a id="tabletoggle2" href="#">Sort by Account</a></li>
+    </ul>
+    
+    {{#if $.Session.get 'table'}}
+    <h2>All Stocks</h2>
+    <div class="panel-group">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+        <a data-toggle="collapse" href="#collapse1">Column visibility</a>
+      </h4>
+            </div>
+            <div id="collapse1" class="panel-collapse collapse">
+                <div class="panel-body">{{>ColumnVisSel}}</div>
+
+            </div>
+        </div>
+    </div>
+
+    {{#if $.Session.get "toggle-column-vis"}} {{>ColumnVisSel}} {{/if}} {{> tabular id="table" table=TabularTables.Stocks class="table table-striped table-bordered table-condensed"}} {{/if}} {{#if $.Session.get 'table1'}}
+
+    <h2>Sorted by Stock</h2>
+    <div class="panel-group">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+        <a data-toggle="collapse" href="#collapse1">Column visibility</a>
+      </h4>
+            </div>
+            <div id="collapse1" class="panel-collapse collapse">
+                <div class="panel-body">{{>ColumnVisSel}}</div>
+
+            </div>
+        </div>
+    </div>
+
+    {{#if $.Session.get "toggle-column-vis"}} {{>ColumnVisSel}} {{/if}} {{> tabular id="table1" table=TabularTables.StockSums class="table table-striped table-bordered table-condensed"}} {{/if}} {{#if $.Session.get 'table2'}}
+    
+    <h2>Sorted by Accounts</h2>
+    <div class="panel-group">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+        <a data-toggle="collapse" href="#collapse1">Column visibility</a>
+      </h4>
+            </div>
+            <div id="collapse1" class="panel-collapse collapse">
+                <div class="panel-body">{{>ColumnVisSel}}</div>
+
+            </div>
+        </div>
+    </div>
+
+    {{#if $.Session.get "toggle-column-vis"}} {{>ColumnVisSel}} {{/if}} {{> tabular id="table2" table=TabularTables.StockAccounts class="table table-striped table-bordered table-condensed"}} {{/if}}
+
+    <br />
+    <br />
+</template>
