@@ -1,5 +1,5 @@
 Template.Accounts.helpers({
-    topGenresChart: function () {
+    Accounts: function () {
         return {
             chart: {
                 plotBackgroundColor: null,
