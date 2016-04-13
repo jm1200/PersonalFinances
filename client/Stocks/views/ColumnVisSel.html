@@ -1,12 +1,15 @@
 <template name="ColumnVisSel">
-    
+    <div class="panel-group">
         <div class="panel panel-default">
             <div class="panel-heading">
-                {{#each checkboxesArr}} {{{this}}} {{/each}}
+                <h4 class="panel-title">
+            <a data-toggle="collapse" href="#collapse1">Column visibility</a>
+          </h4>
+            </div>
+            <div id="collapse1" class="panel-collapse collapse">
+                <div class="panel-body">{{#each checkboxesArr}} {{{this}}} {{/each}}</div>
+
             </div>
         </div>
-    
-
-
-
+    </div>
 </template>
