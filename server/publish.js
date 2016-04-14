@@ -11,3 +11,6 @@ Meteor.publish("StockAccounts", function(){
 Meteor.publish("Stocks", function(){
     return Stocks.find({owner: this.userId});
 });
+Meteor.publish("StockTotalPerformanceData", function(){
+    return StockTotalPerformanceData.find({owner: this.userId});
+});
