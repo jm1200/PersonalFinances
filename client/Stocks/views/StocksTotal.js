@@ -1,37 +1,33 @@
-//Meteor.call("totals", Meteor.userId(), function(err,res){
-//            Session.set("totals", res);
-//        });
-
 Template.StocksTotal.helpers({
-     bookValue: function () {
-         if(StockTotal.findOne({owner: Meteor.userId()})){
-             return formatDollars(StockTotal.findOne({owner: Meteor.userId()}).bookValue);
-         } else {
-             return "No data yet";
-         }
+    bookValue: function () {
+        return getTotals("bookValue");
     },
-     marketValue: function () {
-          if(StockTotal.findOne({owner: Meteor.userId()})){
-             return formatDollars(StockTotal.findOne({owner: Meteor.userId()}).marketValue);
-         } else {
-             return "No data yet";
-         }
-        
+    marketValue: function () {
+        return getTotals("marketValue");
+
     },
-     profitDollars: function () {
-          if(StockTotal.findOne({owner: Meteor.userId()})){
-             return formatDollars(StockTotal.findOne({owner: Meteor.userId()}).profitDollars);
-         } else {
-             return "No data yet";
-         }
-        
+    profitDollars: function () {
+        return getTotals("profitDollars");
+
     },
-     profitPercent: function () {
-          if(StockTotal.findOne({owner: Meteor.userId()})){
-             return StockTotal.findOne({owner: Meteor.userId()}).profitPercent + "%";
-         } else {
-             return "No data yet";
-         }
-        
-    },
+    profitPercent: function () {
+        return getTotals("profitPercent");
+    }
 })
+
+function getTotals(value) {
+    if (StockTotal.findOne({
+            owner: Meteor.userId()
+        })) {
+        return formatDollars(StockTotal.findOne({
+            owner: Meteor.userId()
+        }, {
+            sort: {
+                date: -1,
+                limit: 1
+            }
+        })[value]);
+    } else {
+        return "No data yet";
+    }
+}

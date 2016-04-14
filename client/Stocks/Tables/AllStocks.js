@@ -2,7 +2,13 @@ Template.AllStocks.helpers({
     totalsChart: function () {
         return {
             title: {
-                text: Meteor.user().username + "'s performance"
+                text: (function(){
+                    if(Meteor.user()){
+                       return Meteor.user().username + "'s performance";
+                    } else {
+                        return "Your Stocks";
+                    }
+                })()
             },
             xAxis: {
                 categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']

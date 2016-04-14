@@ -4,7 +4,7 @@ Template.AddStock.events({
         event.preventDefault;
         
         //only uppercase symbols can be used in stock lookup
-        var symbol = [$('#stockValue').val().toUpperCase()];
+        var symbol = [$('#stockValue').val()];
         
         //if no symbol entered, don't submit
         if (symbol[0]== "") {

@@ -34,3 +34,4 @@ momentjs:moment
 raix:handlebar-helpers
 zimme:active-route
 maazalik:highcharts
+percolate:synced-cron

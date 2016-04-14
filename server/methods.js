@@ -4,37 +4,42 @@ import cheerio from 'cheerio';
 //Methods
 Meteor.methods({
     stockLookup: function (symbol) {
-        return getStockObject(buildUrlFromArray(symbol));
+        return getStockObject(symbol);
     },
-    
+
     updateStocks: function (owner) {
         //UPDATE STOCK ASK PRICES FIRST
         //get array of all stock symbols in collection
         var stocksArray = [];
-        var stockDocsCursor = Stocks.find({owner: owner});
+        var stockDocsCursor = Stocks.find({
+            owner: owner
+        });
         stockDocsCursor.forEach(function (doc) {
             if (stocksArray.indexOf(doc.ticker) == -1) {
                 stocksArray.push(doc.ticker);
             }
         });
         //Build Url and do yahoo query
-        var res = getStockObject(buildUrlFromArray(stocksArray));
+        var res = getStockObject(stocksArray);
+
         //console.log(res);
 
         //update Stocks in database
         for (var i = 0; i < res.length; i++) {
-            //console.log(res[i].symbol);
+            //console.log(res[i].ticker);
+            //console.log(res[i].ask);
+            
             Stocks.update({
                 ticker: res[i].ticker
             }, {
                 $set: {
-                    ask: (parseInt(res[i].ask * 100)) / 100
+                    ask: (parseFloat(res[i].ask * 100)) / 100
                 }
             }, {
                 multi: true
             });
         }
-        
+
         Meteor.call("updateTables", owner);
 
 
@@ -112,7 +117,7 @@ Meteor.methods({
                 profitDollars: 0,
                 profitPercent: 0
             });
-            
+
         })
         stockAccountsObjects.forEach(function (account) {
             docs.forEach(function (doc) {
@@ -127,7 +132,7 @@ Meteor.methods({
             });
 
         });
-        
+
         stockAccountsObjects.forEach(function (obj) {
             StockAccounts.upsert({
                 account: obj.account,
@@ -145,6 +150,7 @@ Meteor.methods({
 
         var stockTotal = {
             owner: owner,
+            date: new Date,
             shares: 0,
             bookValue: 0,
             marketValue: 0,
@@ -162,7 +168,8 @@ Meteor.methods({
         stockTotal.profitPercent = roundPercent((stockTotal.marketValue - stockTotal.bookValue) / stockTotal.bookValue);
 
         StockTotal.upsert({
-            owner: stockTotal.owner
+            owner: stockTotal.owner,
+            date: new Date()
         }, {
             $set: {
                 shares: stockTotal.shares,
@@ -176,36 +183,79 @@ Meteor.methods({
     }
 });
 
-//Helpers
-buildUrlFromArray = function (symbols) {
-    var url = "https://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20yahoo.finance.quotes%20where%20symbol%20in%20(";
-    var endUrl = ")%0A%09%09&diagnostics=true&env=http%3A%2F%2Fdatatables.org%2Falltables.env";
+getStockObject = function (symbols) {
+    //BUILD URL
+    var url = "https://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20yahoo.finance.quotes%20where%20symbol%20in%20(%22";
+    var endUrl = "%22)%0A%09%09&format=json&diagnostics=true&env=http%3A%2F%2Fdatatables.org%2Falltables.env";
     var str;
-    var arr = [];
-    for (var i = 0; i < symbols.length; i++) {
-        str = "%22" + symbols[i] + "%22"
-        arr.push(str);
-    }
-    var s = arr.join("%2C");
-    return url + s + endUrl;
-}
-
-getStockObject = function (url) {
     var stocks = [];
-    var stockAsks = [];
-    var result = HTTP.call('GET', url);
-    var $ = cheerio.load(result.content);
-    $('quote').each(function (i, elem) {
+    var tries = 5;
+
+    //make sure symbols are uppercase
+    var stockSymbols = [];
+    for (var i = 0; i < symbols.length; i++) {
+        str = "" + symbols[i].toUpperCase();
+        stockSymbols.push(str);
+    }
+
+    //QUERY -- This is really ugly. I ran into a problem where I was getting
+    //null results back from Yahoo randomly. Maybe their servers were busy? 
+    //The only solution that i could figure out was to keep querying until I finall got an ask price that wasn't null. 
+
+    //do one run through and hopefully get the data I need, else loop while counter is less than 10 tries.
+    for (var k = 0; k < tries; k++) {
+        var symbolString = stockSymbols.join("%2C");
+        var builtUrl = url + symbolString + endUrl;
+        var result = HTTP.call('GET', builtUrl);
+        var quotes = JSON.parse(result.content).query.results.quote;
+        //YQL returns an object for one quote and an array for multiple quotes. Hence different methods depending on object or array.
+        if (stockSymbols.length == 1) {
+            if (quotes.Ask) {
+                //remove symbol from stockSymbols so I don't query for it again and loop breaks.
+                var index = stockSymbols.indexOf(quotes.symbol);
+                stockSymbols.splice(index, 1);
+                stocks.push({
+                    ticker: quotes.symbol,
+                    ask: quotes.Ask,
+                    name: quotes.Name
+                })
+
+            } else {
+                //console.log("no, luck. trying again", k);
+                continue;
+            }
+        } else {
+            for (var j = 0; j < quotes.length; j++) {
+                if (quotes[j].Ask) {
+                    //remove symbol from stockSymbols so I don't query for it again and loop breaks.
+                    var index = stockSymbols.indexOf(quotes[j].symbol);
+                    stockSymbols.splice(index, 1);
+                    stocks.push({
+                        ticker: quotes[j].symbol,
+                        ask: quotes[j].Ask,
+                        name: quotes[j].Name
+                    })
+
+                } else {
+                    //console.log("no, luck. trying again", k);
+                    continue;
+                }
+
+            }
+        }
+        if (stockSymbols.length == 0) {
+            break;
+        } else {
+            continue;
+        }
+    }
+    //Add error to stock if unable to find symbol.
+    //console.log("Stock obj: ", stocks)
+
+    if (!stocks[0] || !stocks[0].ask || stocks[0].ticker == stocks[0].name) {
         stocks.push({
-            ticker: $(elem).find('symbol').text(),
-            ask: $(elem).find('ask').text(),
-            //ask: (parseInt($('ask').text() * 100)) / 100,
-            name: $(elem).find('name').text()
+            error: true
         });
-    });
-    //console.log(stocks);
-    if (!stocks[0].ask || stocks[0].ticker == stocks[0].name) {
-        stocks[0].error = true;
         return stocks;
     } else {
         return stocks;
