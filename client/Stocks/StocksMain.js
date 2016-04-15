@@ -1,7 +1,10 @@
 Meteor.subscribe("StockSums");
 Meteor.subscribe("StockTotal");
+Meteor.subscribe("StockTotalPerformanceData");
 Meteor.subscribe("StockAccounts");
 Meteor.subscribe("Stocks");
+ 
+
 
 Template.StocksMain.events({
     'click .stock-submit': function () {

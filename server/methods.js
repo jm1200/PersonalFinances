@@ -27,7 +27,7 @@ Meteor.methods({
         //update Stocks in database
         for (var i = 0; i < res.length; i++) {
             //console.log(res[i].ticker);
-            //console.log(res[i].ask);
+            console.log("new ask price is: ", res[i].ask);
             
             Stocks.update({
                 ticker: res[i].ticker
