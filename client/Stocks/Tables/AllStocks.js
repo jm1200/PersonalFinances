@@ -8,7 +8,7 @@ Template.AllStocks.helpers({
 
             var data = [];
             for (var i = 0; i < results.data.length; i++) {
-                data.push([results.data[i].date, results.data[i].marketValue])
+                data.push([Date.parse(results.data[i].date), results.data[i].marketValue])
 
             }
             return {

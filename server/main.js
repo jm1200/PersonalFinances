@@ -16,8 +16,7 @@ Meteor.startup(() => {
             _id: userId
         }, {
             $set: {
-                roles: ["admin"],
-                categories: defaultCategories
+                roles: ["admin"]
             }
         });
         console.log("user created: " + userId);

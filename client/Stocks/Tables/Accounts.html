@@ -6,4 +6,11 @@
     
     {{> highchartsHelper chartId="AccountsChart" chartWidth="100%" charHeight="100%" chartObject=Accounts}}
     
+        {{#each graphs}}
+            {{> highchartsHelper chartId=graphId chartWidth="100%" charHeight="100%" chartObject=chartObject}}
+           
+        {{/each}}
+        
+    
+    
 </template>
