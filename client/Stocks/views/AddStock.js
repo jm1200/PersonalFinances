@@ -34,6 +34,9 @@ Template.AddStock.events({
     'click .update-stocks': function () {
         Meteor.call('updateStocks', Meteor.userId());
 
+    },
+    'click .cash': function(){
+        $('#cashModal').modal('show');
     }
 });
 

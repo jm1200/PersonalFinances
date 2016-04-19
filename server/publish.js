@@ -14,3 +14,9 @@ Meteor.publish("Stocks", function(){
 Meteor.publish("StockTotalPerformanceData", function(){
     return StockTotalPerformanceData.find({owner: this.userId});
 });
+Meteor.publish("CashTotal", function(){
+    return CashTotal.find({owner: this.userId});
+});
+Meteor.publish("CashTransactions", function(){
+    return CashTransactions.find({owner: this.userId});
+});

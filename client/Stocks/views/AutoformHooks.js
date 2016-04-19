@@ -23,5 +23,29 @@ AutoForm.hooks({
                 Meteor.call("updateTables", Meteor.userId());
             }
         }
+    },
+    cashForm: {
+        before:{
+            insert: function(doc){
+                doc.owner = Meteor.userId();
+                if(doc.action == "Withdrawl"){
+                    doc.amount = doc.amount * -1;
+                }
+                if(CashTotal.findOne({owner: doc.owner})){
+                    Meteor.call("updateCashTotal", doc);
+                    
+                } else {
+                    CashTotal.insert({owner: doc.owner, date: new Date(), total: doc.amount});
+                }
+                return doc;
+            }
+            
+        },
+        after:{
+            insert:function(doc){
+                $('#cashModal').modal('hide');
+            }
+        }
+        
     }
 });

@@ -3,6 +3,8 @@ Meteor.subscribe("StockTotal");
 Meteor.subscribe("StockTotalPerformanceData");
 Meteor.subscribe("StockAccounts");
 Meteor.subscribe("Stocks");
+Meteor.subscribe("CashTotal");
+Meteor.subscribe("CashTransactions");
  
 
 
