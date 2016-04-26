@@ -1,0 +1,11 @@
+<template name="BuyStock">
+    {{#autoForm collection="Stocks" id="stocksForm" validation="submit"
+    class="stocks-form" type="insert"}} 
+    {{> afQuickField name='date'}} 
+    {{> afQuickField name='buyPrice'}} 
+    {{> afQuickField name='shares'}} 
+    {{> afQuickField name='account'}}
+
+    <button type="submit" class="btn btn-primary">Insert</button>
+    {{/autoForm}}
+</template>

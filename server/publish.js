@@ -20,3 +20,6 @@ Meteor.publish("CashTotal", function(){
 Meteor.publish("CashTransactions", function(){
     return CashTransactions.find({owner: this.userId});
 });
+Meteor.publish("PortfolioTotal", function(){
+    return PortfolioTotal.find({owner: this.userId});
+});

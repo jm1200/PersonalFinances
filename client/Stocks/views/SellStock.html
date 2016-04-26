@@ -1,0 +1,58 @@
+<template name="SellStock">
+    <div class="modal-body">
+        <div class="row">
+            <input type="text" name="symbol" id="stockValue">
+            <button class="stock-lookup btn btn-primary">Look up Stock</button>
+        </div>
+        <br />
+        <div class="row step1">
+
+            
+            <!--                    if stock found show the stock, else show loading-->
+            {{#if stock}}
+            <!--                       if stock.error is true display error message, else display stock-->
+                {{#if stock.error}}
+                    <br />
+                    <div class="panel panel-danger">
+                        <div class="panel-heading">Oops! We couldn't find your stock!</div>
+                        <div class="panel-body">Different markets and databanks describe stock symbols in different ways. Try looking your stock up on <a href="https://ca.finance.yahoo.com/">Yahoo Finance</a>. This site uses the same symbology that Yahoo does.</div>
+                    </div>
+                    <button class="btn btn-danger wrong-stock">Try Different Symbol</button>
+                {{else}}
+                   <p>Is this your stock?</p>
+                    <p>Name: {{stock.name}} </p>
+                    <p>Ask Price: {{stock.ask}} </p>
+                    <button class="btn btn-success correct-stock">Yes</button>
+                    <button class="btn btn-danger wrong-stock">Try Different Symbol</button>
+                {{/if}} 
+            {{else}}
+                <p>Loading...</p>
+            {{/if}}
+            <br />
+            
+            
+        </div>
+        <div class="row step2">
+            {{#autoForm collection="Stocks" type="insert" id="insertStockTransactionForm"}}
+                {{> afQuickField name="action" options="allowed" noselect=true}}
+                {{> afQuickField name='date'}} 
+                {{> afQuickField name='price'}} 
+                {{> afQuickField name='shares'}} 
+                {{> afQuickField name='account'}}
+                <button type="submit" class="btn btn-primary">Insert</button>
+            {{/autoForm}}
+        </div>
+        <div class="row error">
+              <div class="panel panel-danger">
+                <div class="panel-heading">Oops! We couldn't find your stock!</div>
+                <div class="panel-body">Different markets and databanks describe stock symbols in different ways. Try looking your stock up on <a href="https://ca.finance.yahoo.com/">Yahoo Finance</a>. This site uses the same symbology that Yahoo does.</div> 
+          </div>  
+        </div>
+    </div>
+
+    <!--
+    {{#autoForm collection="Stocks" id="sellStockForm" validation="submit" type="insert"}} {{> afQuickField name='date'}} {{> afQuickField name='ticker'}} {{> afQuickField name='sellPrice'}} {{> afQuickField name='shares'}}
+    <button type="submit" class="btn btn-primary">Insert</button>
+    {{/autoForm}}
+-->
+</template>

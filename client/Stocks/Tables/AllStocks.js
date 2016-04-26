@@ -1,16 +1,18 @@
 Template.AllStocks.helpers({
     totalsChart: function () {
-        if (StockTotalPerformanceData.findOne()) {
-            var results = StockTotalPerformanceData.findOne({
+        if (PortfolioTotal.findOne()) {
+            var results = PortfolioTotal.findOne({
                 owner: Meteor.userId()
             });
             //console.log(results.data[0].marketValue);
-
+           
+            
             var data = [];
             for (var i = 0; i < results.data.length; i++) {
-                data.push([Date.parse(results.data[i].date), results.data[i].marketValue])
+                data.push([Date.parse(results.data[i].date), results.data[i].total])
 
             }
+            
             return {
                 title: {
                     text: (function () {

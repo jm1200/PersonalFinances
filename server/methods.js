@@ -83,11 +83,17 @@ Meteor.methods({
                 docs.forEach(function (doc) {
                     if (doc.ticker == stock.ticker) {
                         //console.log(doc.ticker + " " + doc.shares);
-                        stock.shares += doc.shares;
-                        stock.bookValue += doc.bookValue;
-                        stock.marketValue += doc.marketValue;
-                        stock.profitDollars = roundDollars(doc.marketValue - doc.bookValue);
-                        stock.profitPercent = roundPercent((doc.marketValue - doc.bookValue) / doc.bookValue)
+                        if (doc.sellPrice) {
+                            stock.shares -= doc.shares;
+                        }
+                        if (doc.buyPrice) {
+                            stock.shares += doc.shares;
+                            stock.bookValue += doc.bookValue;
+                            stock.marketValue += doc.marketValue;
+                            stock.profitDollars = roundDollars(doc.marketValue - doc.bookValue);
+                            stock.profitPercent = roundPercent((doc.marketValue - doc.bookValue) / doc.bookValue)
+                        }
+
                     }
                 });
 

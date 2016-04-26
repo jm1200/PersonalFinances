@@ -3,8 +3,8 @@ SyncedCron.add({
     schedule: function (parser) {
         // parser is a later.parse object
         //return parser.text('at 5:30pm');
-        //return parser.text('every 5 minute');
-        return parser.text('every weekday every 1 hours after 9:00am before 6:00pm');
+        return parser.text('every 1 minute');
+        //return parser.text('every weekday every 1 hours after 9:00am before 6:00pm');
     },
     job: function () {
         //get array of users
@@ -18,6 +18,9 @@ SyncedCron.add({
         for (var i = 0; i < users.length; i++) {
             //update stocks first
             Meteor.call("updateStocks", users[i]);
+            
+            var cash = CashTotal.findOne({owner: users[i]}).total;
+            //console.log("cash: ", cash)
 
             var docs = Stocks.find({
                 owner: users[i]
@@ -41,14 +44,28 @@ SyncedCron.add({
             });
             stockTotal.profitDollars = roundDollars(stockTotal.marketValue - stockTotal.bookValue);
             stockTotal.profitPercent = roundPercent((stockTotal.marketValue - stockTotal.bookValue) / stockTotal.bookValue);
-
-            StockTotalPerformanceData.upsert({
+            stockTotal.total = stockTotal.marketValue + cash;
+            
+            
+            var money = stockTotal.marketValue + cash;
+            var graphData = {total: money, date: new Date()};
+            
+            PortfolioTotal.upsert({
                 owner: stockTotal.owner     
             }, {
                 $push: {
-                    data: stockTotal
+                    data: graphData                   
                 }
             })
+
+//            StockTotalPerformanceData.upsert({
+//                owner: stockTotal.owner     
+//            }, {
+//                $push: {
+//                    data: stockTotal                    
+//                }
+//            })
+            
         }
 
         console.log("cron job completed");
@@ -56,4 +73,4 @@ SyncedCron.add({
 
 });
 
-SyncedCron.start();
+//SyncedCron.start();

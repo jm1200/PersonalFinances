@@ -5,6 +5,8 @@ Meteor.subscribe("StockAccounts");
 Meteor.subscribe("Stocks");
 Meteor.subscribe("CashTotal");
 Meteor.subscribe("CashTransactions");
+Meteor.subscribe("PortfolioTotal");
+ 
  
 
 
