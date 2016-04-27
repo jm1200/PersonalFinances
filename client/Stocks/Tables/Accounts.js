@@ -2,87 +2,106 @@ Template.Accounts.helpers({
     graphs: function () {
         //Get data for all accounts pie chart
         var allAccounts = function () {
-            if (StockAccounts.findOne()) {
-                var results = StockAccounts.find({
-                    owner: Meteor.userId()
-                }).fetch();
+                if (StockAccounts.findOne()) {
+                    var results = StockAccounts.find({
+                        owner: Meteor.userId()
+                    }).fetch();
 
-                var data = [];
-                for (var i = 0; i < results.length; i++) {
-                    data.push([results[i].account, results[i].marketValue]);
+                    var data = [];
+                    for (var i = 0; i < results.length; i++) {
+                        data.push([results[i].account, results[i].marketValue]);
+                    }
+                    return data;
                 }
-                return data;
             }
-        }
+            //get data for each individual account
         var getdata2 = function () {
-            if (Stocks.findOne()) {
-                var stocks = Stocks.find({
+            //accounts array will contain account objects with each stock and their percentages
+            //initialize the accounts array
+            //                accounts.push({
+            //                        account: stocks[0].account,
+            //                        totalMarketValue: stocks[0].marketValue,
+            //                        stocks: [{
+            //                            stock: stocks[0].ticker,
+            //                            marketValue: stocks[0].marketValue
+            //                        }]
+            //                    })
+            //get all stock data
+            if (StockAccounts.findOne()) {
+                var accounts = StockAccounts.find({
                     owner: Meteor.userId()
                 }).fetch();
-                var accounts = [];
-                accounts.push({
-                        account: stocks[0].account,
-                        totalMarketValue: stocks[0].marketValue,
-                        stocks: [{
-                            stock: stocks[0].ticker,
-                            marketValue: stocks[0].marketValue
-                        }]
-                    })
-                    //if account doesn't exist in array, create it
-                for (var doc = 1; doc < stocks.length; doc++) {
-                    //check if stock account is in accounts array
-                    var inAccounts = false
-                    for (var acc = 0; acc < accounts.length; acc++) {
-                        if (accounts[acc].account == stocks[doc].account) {
-                            inAccounts = true;
-                            accounts[acc].totalMarketValue += stocks[doc].marketValue;
-                            var inStocks = false;
-                            for (var stock = 0; stock < accounts[acc].stocks.length; stock++) {
-                                if (accounts[acc].stocks[stock].stock == stocks[doc].ticker) {
+                if (Stocks.findOne()) {
+                    var stocks = Stocks.find({
+                        owner: Meteor.userId()
+                    }).fetch();
 
-                                    inStocks = true;
-                                    accounts[acc].stocks[stock].marketValue += stocks[doc].marketValue;
+
+
+                    var accountsData = [];
+                    stocks.reduce(function (res, value) {
+                        if (!res[value.account]) {
+                            res[value.account] = {
+                                account: value.account,
+                                totalMarketValue: 0,
+                                stocks: []
+                            }
+
+                            accountsData.push(res[value.account]);
+
+                        }
+                        if (value.action == "Buy") {
+                            res[value.account].totalMarketValue += value.marketValue;
+                        }
+                        if (value.action == "Sell") {
+                            res[value.account].totalMarketValue -= value.marketValue;
+                        }
+
+                        return res;
+                    }, {});
+
+                    accountsData.forEach(function (elem, i) {
+                        stocks.reduce(function (res, value) {
+                            if (value.account == accountsData[i].account) {
+                                if (!res[value.ticker]) {
+                                    res[value.ticker] = {
+                                        stock: value.ticker,
+                                        marketValue: 0
+                                    }
+                                    accountsData[i].stocks.push(res[value.ticker]);
+                                }
+                                if (value.action == "Buy") {
+                                    res[value.ticker].marketValue += value.marketValue;
+                                }
+                                if (value.action == "Sell") {
+                                    res[value.ticker].marketValue -= value.marketValue;
                                 }
                             }
-                            if (!inStocks) {
-                                accounts[acc].stocks.push({
-                                    stock: stocks[doc].ticker,
-                                    marketValue: stocks[doc].marketValue,
-                                });
-                            }
-                        }
-                    }
-                    if (!inAccounts) {
-                        accounts.push({
-                            account: stocks[doc].account,
-                            totalMarketValue: stocks[doc].marketValue,
-                            stocks: [{
-                                stock: stocks[doc].ticker,
-                                marketValue: stocks[doc].marketValue
-                        }]
-                        })
-                    }
-                }
-                //if stock doesn't exist in account object, create it
-                for (var i = 0; i < accounts.length; i++) {
+                            return res;
+
+                        }, {});
+                    });
+                    console.log(accountsData);
+                } //Stocks.findOne()
+            } //StockAccounts.findOne()
+
+            //object returned is: [{data: ["stock", percent], id: account name}] 
+            var accounts = accountsData;
+            var graphData = [];
+            for (var i = 0; i < accounts.length; i++) {
+                if (accounts[i].totalMarketValue != 0) {
+                    var data = [];
                     for (var j = 0; j < accounts[i].stocks.length; j++) {
-                        accounts[i].stocks[j].percentage = Math.round(accounts[i].stocks[j].marketValue / accounts[i].totalMarketValue * 100);
+                        data.push([accounts[i].stocks[j].stock, accounts[i].stocks[j].marketValue]);
                     }
+                    graphData.push({
+                        data: data,
+                        graphId: accounts[i].account
+                    });
                 }
 
             }
-            //return [{data: ["stock", percent], id: account name}] 
-            var graphData = [];
-            for (var i = 0; i < accounts.length; i++) {
-                var data = [];
-                for (var j = 0; j < accounts[i].stocks.length; j++) {
-                    data.push([accounts[i].stocks[j].stock, accounts[i].stocks[j].marketValue]);
-                }
-                graphData.push({data: data, graphId: accounts[i].account});
-            }
-            
-            //console.log(graphData);
-            //console.log(accounts[0].stocks);
+            console.log(graphData);
             return graphData;
 
 
@@ -90,7 +109,7 @@ Template.Accounts.helpers({
 
 
 
-        var graph = function (data) {
+        var graph = function (data, title) {
             return {
                 chart: {
                     plotBackgroundColor: null,
@@ -98,7 +117,7 @@ Template.Accounts.helpers({
                     plotShadow: false
                 },
                 title: {
-                    text: Meteor.user().username + "'s Accounts"
+                    text: title
                 },
                 tooltip: {
                     pointFormat: '<b>{point.percentage:.1f}%</b>'
@@ -125,22 +144,24 @@ Template.Accounts.helpers({
                     }]
             };
         }
+        
         var graphs = [
             {
-                chartObject: graph(allAccounts()),
+                chartObject: graph(allAccounts(), "All Accounts"),
                 graphId: "allAccounts"
             }
         ];
         var accGraphs = getdata2();
-        console.log(accGraphs);
+        //console.log(accGraphs);
 
         for (var i = 0; i < accGraphs.length; i++) {
             graphs.push({
-                chartObject: graph(accGraphs[i].data),
+                
+                chartObject: graph(accGraphs[i].data, accGraphs[i].graphId),
                 graphId: accGraphs[i].graphId
             })
         }
-        console.log(graphs);
+        //console.log(graphs);
 
 
         return graphs;

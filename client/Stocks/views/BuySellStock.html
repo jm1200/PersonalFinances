@@ -1,13 +1,11 @@
-<template name="SellStock">
+<template name="BuySellStock">
     <div class="modal-body">
         <div class="row">
             <input type="text" name="symbol" id="stockValue">
             <button class="stock-lookup btn btn-primary">Look up Stock</button>
         </div>
         <br />
-        <div class="row step1">
-
-            
+        <div class="row step1"> 
             <!--                    if stock found show the stock, else show loading-->
             {{#if stock}}
             <!--                       if stock.error is true display error message, else display stock-->
@@ -28,9 +26,7 @@
             {{else}}
                 <p>Loading...</p>
             {{/if}}
-            <br />
-            
-            
+            <br /> 
         </div>
         <div class="row step2">
             {{#autoForm collection="Stocks" type="insert" id="insertStockTransactionForm"}}
@@ -49,10 +45,4 @@
           </div>  
         </div>
     </div>
-
-    <!--
-    {{#autoForm collection="Stocks" id="sellStockForm" validation="submit" type="insert"}} {{> afQuickField name='date'}} {{> afQuickField name='ticker'}} {{> afQuickField name='sellPrice'}} {{> afQuickField name='shares'}}
-    <button type="submit" class="btn btn-primary">Insert</button>
-    {{/autoForm}}
--->
 </template>

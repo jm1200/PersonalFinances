@@ -26,6 +26,7 @@ Meteor.methods({
                 for (var k = 0; k < res.length; k++) {
                     if (result[j].ticker == res[k].ticker) {
                         result[j].ask = res[k].ask;
+                        console.log(result[j].shares);
                         result[j].marketValue = result[j].shares * res[k].ask;
                     }
                 }
@@ -33,7 +34,8 @@ Meteor.methods({
             //update Stocks in database
             for (var i = 0; i < result.length; i++) {
                 Stocks.update({
-                    ticker: result[i].ticker
+                    ticker: result[i].ticker,
+                    account: result[i].account
                 }, {
                     $set: {
                         ask: result[i].ask,
@@ -47,15 +49,19 @@ Meteor.methods({
         Meteor.call("updateTables", owner);
     },
     updateTables: function (owner) {
+
+        //Get an array of every stock Transaction
         if (Stocks.findOne()) {
             var docs = Stocks.find({
                 owner: owner
             }).fetch();
 
-            //3 tables to update
+            //2 tables to update
+            //get array of stock sums and stock accounts
             var stockSums = [];
             var stockAccounts = [];
 
+            //build arrays
             docs.forEach(function (doc) {
                 if (stockSums.indexOf(doc.ticker) == -1) {
                     stockSums.push(doc.ticker);
@@ -65,39 +71,48 @@ Meteor.methods({
                 }
             });
 
+            //update the stock sums table data
+            //initialize the object for each stock sum with values
             var StockSumsObjects = [];
             stockSums.forEach(function (ticker) {
-                StockSumsObjects.push({
-                    owner: owner,
-                    ticker: ticker,
-                    shares: 0,
-                    bookValue: 0,
-                    marketValue: 0,
-                    profitDollars: 0,
-                    profitPercent: 0
-                });
+                    StockSumsObjects.push({
+                        owner: owner,
+                        ticker: ticker,
+                        shares: 0,
+                        bookValue: 0,
+                        marketValue: 0,
+                        profitDollars: 0,
+                        profitPercent: 0
+                    });
 
-            })
+                })
+                //get total values for each stock
 
             StockSumsObjects.forEach(function (stock) {
                 docs.forEach(function (doc) {
                     if (doc.ticker == stock.ticker) {
                         //console.log(doc.ticker + " " + doc.shares);
-                        if (doc.sellPrice) {
+                        if (doc.action == "Sell") {
                             stock.shares -= doc.shares;
+                            stock.bookValue -= doc.bookValue;
+                            stock.marketValue -= doc.marketValue;
+
                         }
-                        if (doc.buyPrice) {
+                        if (doc.action == "Buy") {
                             stock.shares += doc.shares;
                             stock.bookValue += doc.bookValue;
                             stock.marketValue += doc.marketValue;
-                            stock.profitDollars = roundDollars(doc.marketValue - doc.bookValue);
-                            stock.profitPercent = roundPercent((doc.marketValue - doc.bookValue) / doc.bookValue)
+
                         }
 
                     }
                 });
+                stock.profitDollars = roundDollars(stock.marketValue - stock.bookValue);
+                stock.profitPercent = roundPercent((stock.marketValue - stock.bookValue) / stock.bookValue)
 
             });
+
+            //upsert the new stock sums data
             StockSumsObjects.forEach(function (obj) {
                 StockSums.upsert({
                     ticker: obj.ticker,
@@ -129,31 +144,47 @@ Meteor.methods({
             })
             stockAccountsObjects.forEach(function (account) {
                 docs.forEach(function (doc) {
+                    
                     if (doc.account == account.account) {
-                        //console.log(doc.ticker + " " + doc.shares);
-                        account.shares += doc.shares;
-                        account.bookValue += doc.bookValue;
-                        account.marketValue += doc.marketValue;
-                        account.profitDollars = roundDollars(doc.marketValue - doc.bookValue);
-                        account.profitPercent = roundPercent((doc.marketValue - doc.bookValue) / doc.bookValue);
+                        if (doc.action == "Sell") {
+                            account.shares -= doc.shares;
+                            account.bookValue -= doc.bookValue;
+                            account.marketValue -= doc.marketValue;
+                        }
+                        if (doc.action == "Buy") {
+                            account.shares += doc.shares;
+                            account.bookValue += doc.bookValue;
+                            account.marketValue += doc.marketValue;
+                        }
+
+                        account.profitDollars = roundDollars(account.marketValue - account.bookValue);
+                        account.profitPercent = roundPercent((account.marketValue - account.bookValue) / account.bookValue);
                     }
                 });
 
             });
 
             stockAccountsObjects.forEach(function (obj) {
-                StockAccounts.upsert({
-                    account: obj.account,
-                    owner: obj.owner
-                }, {
-                    $set: {
-                        shares: obj.shares,
-                        bookValue: obj.bookValue,
-                        marketValue: obj.marketValue,
-                        profitDollars: obj.profitDollars,
-                        profitPercent: obj.profitPercent
-                    }
-                });
+                if (obj.shares == 0) {
+                    StockAccounts.remove({
+                        owner: obj.owner,
+                        account: obj.account
+                    });
+                } else {
+                    StockAccounts.upsert({
+                        account: obj.account,
+                        owner: obj.owner
+                    }, {
+                        $set: {
+                            shares: obj.shares,
+                            bookValue: obj.bookValue,
+                            marketValue: obj.marketValue,
+                            profitDollars: obj.profitDollars,
+                            profitPercent: obj.profitPercent
+                        }
+                    });
+                }
+
             });
 
             var stockTotal = {

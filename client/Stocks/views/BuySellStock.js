@@ -1,14 +1,4 @@
-Template.SellStock.onRendered(function() {
-    $('.step1').hide();
-    $('.step2').hide();
-    $('.error').hide();
-})
-
-Template.SellStock.onDestroyed(function(){
-    Session.set('stock', {});
-})
-
-Template.SellStock.events({
+Template.BuySellStock.events({
     'click .stock-lookup': function () {
         event.preventDefault;
         
@@ -38,7 +28,7 @@ Template.SellStock.events({
     }
 })
 
-Template.SellStock.helpers({
+Template.BuySellStock.helpers({
     //display stock inside modal
     stock: function () {
         if (Session.get('stock')) {
