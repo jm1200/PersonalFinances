@@ -1,33 +1,11 @@
+Template.StocksTotal.onCreated(function(){
+    Meteor.call("updateStockTotals", Meteor.userId(), function(error, result){
+        Session.set("totals", result);
+    })
+});
+
 Template.StocksTotal.helpers({
-    bookValue: function () {
-        return getTotals("bookValue");
-    },
-    marketValue: function () {
-        return getTotals("marketValue");
-
-    },
-    profitDollars: function () {
-        return getTotals("profitDollars");
-
-    },
-    profitPercent: function () {
-        return getTotals("profitPercent");
+    totals: function(){
+        return Session.get("totals");
     }
-})
-
-function getTotals(value) {
-    if (StockTotal.findOne({
-            owner: Meteor.userId()
-        })) {
-        return formatDollars(StockTotal.findOne({
-            owner: Meteor.userId()
-        }, {
-            sort: {
-                date: -1,
-                limit: 1
-            }
-        })[value]);
-    } else {
-        return "No data yet";
-    }
-}
+});

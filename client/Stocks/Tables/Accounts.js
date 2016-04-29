@@ -81,7 +81,7 @@ Template.Accounts.helpers({
 
                         }, {});
                     });
-                    console.log(accountsData);
+                    //console.log(accountsData);
                 } //Stocks.findOne()
             } //StockAccounts.findOne()
 
@@ -101,7 +101,7 @@ Template.Accounts.helpers({
                 }
 
             }
-            console.log(graphData);
+            //console.log(graphData);
             return graphData;
 
 

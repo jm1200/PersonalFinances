@@ -8,20 +8,20 @@
                 <div class="col-md-3 col-sm-6 col-xs-12">
                     <div class="panel panel-info">
                         <div class="panel-heading">
-                            <h3 class="panel-title">Book Value</h3>
+                            <h3 class="panel-title">Total Value</h3>
                         </div>
                         <div class="panel-body text-center">
-                            <span class="big-numbers">{{bookValue}}</span>
+                            <span class="big-numbers">{{totals.totalValue}}</span>
                         </div>
                     </div>
                 </div>
                 <div class="col-md-3 col-sm-6 col-xs-12">
                     <div class="panel panel-info">
                         <div class="panel-heading">
-                            <h3 class="panel-title">Market Value</h3>
+                            <h3 class="panel-title">Portfolio Value</h3>
                         </div>
                         <div class="panel-body text-center">
-                            <span class="big-numbers">{{marketValue}}</span>
+                            <span class="big-numbers">{{totals.portfolioValue}}</span>
                         </div>
                     </div>
                 </div>
@@ -31,7 +31,56 @@
                             <h3 class="panel-title">Profit($))</h3>
                         </div>
                         <div class="panel-body text-center">
-                            <span class="big-numbers">{{profitDollars}}</span>
+                            <span class="big-numbers">{{totals.profit}}</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 col-sm-6 col-xs-12">
+                    <div class="panel panel-success">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">cash</h3>
+                        </div>
+                        <div class="panel-body text-center">
+                            <span class="big-numbers">{{totals.cash}}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            <h3 class="panel-title">Portfolio Summary</h3>
+        </div>
+        <div class="panel-body">
+            <div class="row">
+                <div class="col-md-3 col-sm-6 col-xs-12">
+                    <div class="panel panel-info">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">Book Value</h3>
+                        </div>
+                        <div class="panel-body text-center">
+                            <span class="big-numbers">{{totals.bookValue}}</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 col-sm-6 col-xs-12">
+                    <div class="panel panel-info">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">Market Value</h3>
+                        </div>
+                        <div class="panel-body text-center">
+                            <span class="big-numbers">{{totals.marketValue}}</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 col-sm-6 col-xs-12">
+                    <div class="panel panel-success">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">Profit($))</h3>
+                        </div>
+                        <div class="panel-body text-center">
+                            <span class="big-numbers">{{totals.profitDollars}}</span>
                         </div>
                     </div>
                 </div>
@@ -41,7 +90,7 @@
                             <h3 class="panel-title">Profit(%)</h3>
                         </div>
                         <div class="panel-body text-center">
-                            <span class="big-numbers">{{profitPercent}}</span>
+                            <span class="big-numbers">{{totals.profitPercent}}</span>
                         </div>
                     </div>
                 </div>

@@ -40,6 +40,16 @@ Template.ColumnVisSel.helpers({
 
             ]
         }
+        if (Session.get("table3")) {
+            checkboxesArr = [
+                '<input id="date1" type="checkbox" class="toggle-column-date-checkbox" checked>Date',
+                '<input id="action" type="checkbox" class="toggle-column-date-checkbox" checked>Transaction',
+                '<input id="actionFrom" type="checkbox" class="toggle-column-date-checkbox" checked>Transaction From',
+                '<input id="amount" type="checkbox" class="toggle-column-date-checkbox" checked>Amount',
+                '<input id="notes" type="checkbox" class="toggle-column-date-checkbox" checked>Notes',
+
+            ]
+        }
 
 
 
@@ -57,6 +67,7 @@ Template.ColumnVisSel.events({
         var table = $('#table').DataTable();
         var table1 = $('#table1').DataTable();
         var table2 = $('#table2').DataTable();
+        var table3 = $('#table3').DataTable();
 
         var column;
         switch (targetId) {
@@ -154,6 +165,26 @@ Template.ColumnVisSel.events({
             break;
         case "profitPercent2":
             column = table2.column(5);
+            column.visible(!column.visible());
+            break;
+        case "date1":
+            column = table3.column(0);
+            column.visible(!column.visible());
+            break;
+        case "action":
+            column = table3.column(1);
+            column.visible(!column.visible());
+            break;
+        case "actionFrom":
+            column = table3.column(2);
+            column.visible(!column.visible());
+            break;
+        case "amount":
+            column = table3.column(3);
+            column.visible(!column.visible());
+            break;
+        case "notes":
+            column = table3.column(4);
             column.visible(!column.visible());
             break;
         }
