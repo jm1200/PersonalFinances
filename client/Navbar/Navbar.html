@@ -15,8 +15,14 @@
             <!-- Collect the nav links, forms, and other content for toggling -->
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav">
+                    <li class="{{isActivePath path='/'}}"><a href="/">Home</a></li>
                     <li class="{{isActivePath path='/fv'}}"><a href="/fv">Future Value</a></li>
+                    
+                    {{#if currentUser}}
                     <li class="{{isActivePath path='/stocks'}}"><a href="/stocks">Stocks</a></li>
+                    {{/if}}
+
+
                 </ul>
 
                 <ul class="nav navbar-nav navbar-right">

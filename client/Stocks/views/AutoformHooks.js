@@ -3,21 +3,7 @@ AutoForm.hooks({
         before: {
             insert: function (doc) {
                 doc.owner = Meteor.userId();
-                if (doc.action == "Withdrawl") {
-                    doc.amount = doc.amount * -1;
-                }
-                if (CashTotal.findOne({
-                        owner: doc.owner
-                    })) {
-                    Meteor.call("updateCashTotal", doc, doc.amount);
-
-                } else {
-                    CashTotal.insert({
-                        owner: doc.owner,
-                        date: new Date(),
-                        total: doc.amount
-                    });
-                }
+                
                 return doc;
             }
 
