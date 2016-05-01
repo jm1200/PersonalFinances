@@ -1,33 +1,32 @@
 <template name="StocksMain">
     <div class="container">
-       
-        <div class="row">
-            <h1>Stock Portfolio</h1>
-        </div>
+        {{>DetailsModals}}
         
+
         <!--  Portfolio Summary Section-->
-        <div class="row">  
+        <div class="row">
             {{>StocksTotal}}
         </div>
-        
-        
+
+
         <!--  Portfolio Buttons and Tools-->
         <div class="row">
             {{>AddStock}}
             <!-- <br /> {{>ColumnVisSel}}-->
         </div>
-         <br />
-          
-        <!--  Tables-->      
+        <br />
+
+        <!--  Tables-->
         <div class="row">
             {{>StocksTable}}
+
         </div>
-        
+
         <!--  Graphs-->
         <div class="row">
+
             
-            <h3>Graphs</h3>
-            {{> highchartsHelper chartId="test" chartWidth="100%" charHeight="100%" chartObject=topGenresChart}}
+
         </div>
     </div>
 </template>

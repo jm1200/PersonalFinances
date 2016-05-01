@@ -4,7 +4,7 @@ import {
 from 'meteor/meteor';
 
 Meteor.startup(() => {
-    // Create admin user
+     //Create admin user
     if (!Meteor.users.findOne()) {
         var userId = Accounts.createUser({
             username: "John",

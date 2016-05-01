@@ -151,17 +151,18 @@ Template.Accounts.helpers({
                 graphId: "allAccounts"
             }
         ];
-        var accGraphs = getdata2();
-        //console.log(accGraphs);
-
-        for (var i = 0; i < accGraphs.length; i++) {
-            graphs.push({
-                
-                chartObject: graph(accGraphs[i].data, accGraphs[i].graphId),
-                graphId: accGraphs[i].graphId
-            })
-        }
-        //console.log(graphs);
+//        var accGraphs = getdata2();
+//        //console.log(accGraphs);
+//
+//        for (var i = 0; i < accGraphs.length; i++) {
+//            graphs.push({
+//                
+//                chartObject: graph(accGraphs[i].data, accGraphs[i].graphId),
+//                graphId: accGraphs[i].graphId
+//            })
+//        }
+//        //console.log(graphs);
+//        $(window).resize();
 
 
         return graphs;

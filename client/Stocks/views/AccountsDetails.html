@@ -1,0 +1,51 @@
+<template name="AccountsDetails">
+    <button type="button" class="btn btn-primary accounts-details-graph">Pie Graph</button>
+    <button type="button" class="btn btn-primary accounts-details-table">Details Table</button>
+</template>
+
+
+<template name="DetailsModals">
+    {{>AccountsGraph}} {{>AccountsTable}} {{>StockSumsGraph}} {{>StockSumsTable}}
+</template>
+
+
+<template name="AccountsGraph">
+    <div id="accountsDetailsGraphModal" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close on-close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Accounts Details</h4>
+                </div>
+                <div class="modal-body">
+                    {{> highchartsHelper chartId="accountsDetails" chartWidth="100%" charHeight="100%" chartObject=accountsGraph}}
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-default on-close" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</template>
+
+
+<template name="AccountsTable">
+    <div id="accountsDetailsTableModal" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close on-close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Accounts Details</h4>
+                </div>
+                <div class="modal-body">
+                    {{> ReactiveDatatable tableData=reactiveDataFunction options=optionsObject }}
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-default on-close" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</template>

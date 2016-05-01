@@ -35,4 +35,5 @@ raix:handlebar-helpers
 zimme:active-route
 maazalik:highcharts
 percolate:synced-cron
+ephemer:reactive-datatables
 

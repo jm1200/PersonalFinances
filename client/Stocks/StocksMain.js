@@ -6,8 +6,8 @@ Meteor.subscribe("Stocks");
 Meteor.subscribe("CashTotal");
 Meteor.subscribe("CashTransactions");
 Meteor.subscribe("PortfolioTotal");
- 
- 
+
+
 
 
 Template.StocksMain.events({
@@ -31,3 +31,6 @@ Template.StocksMain.helpers({
         return Session.get('stock');
     }
 })
+
+
+
