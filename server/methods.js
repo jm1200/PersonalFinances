@@ -194,42 +194,100 @@ Meteor.methods({
 
             });
 
-            var stockTotal = {
-                owner: owner,
-                date: new Date,
-                shares: 0,
-                bookValue: 0,
-                marketValue: 0,
-                profitDollars: 0,
-                profitPercent: 0
-            };
-
-            docs.forEach(function (doc) {
-                stockTotal.shares += doc.shares;
-                stockTotal.bookValue += doc.bookValue;
-                stockTotal.marketValue += doc.marketValue;
-
-            });
-            stockTotal.profitDollars = roundDollars(stockTotal.marketValue - stockTotal.bookValue);
-            stockTotal.profitPercent = roundPercent((stockTotal.marketValue - stockTotal.bookValue) / stockTotal.bookValue);
-
-            StockTotal.upsert({
-                owner: stockTotal.owner
-            }, {
-                $set: {
-                    shares: stockTotal.shares,
-                    bookValue: stockTotal.bookValue,
-                    marketValue: stockTotal.marketValue,
-                    profitDollars: stockTotal.profitDollars,
-                    profitPercent: stockTotal.profitPercent
-                }
-            })
+//            var stockTotal = {
+//                owner: owner,
+//                date: new Date,
+//                shares: 0,
+//                bookValue: 0,
+//                marketValue: 0,
+//                profitDollars: 0,
+//                profitPercent: 0
+//            };
+//
+//            docs.forEach(function (doc) {
+//                stockTotal.shares += doc.shares;
+//                stockTotal.bookValue += doc.bookValue;
+//                stockTotal.marketValue += doc.marketValue;
+//
+//            });
+//            stockTotal.profitDollars = roundDollars(stockTotal.marketValue - stockTotal.bookValue);
+//            stockTotal.profitPercent = roundPercent((stockTotal.marketValue - stockTotal.bookValue) / stockTotal.bookValue);
+//
+//            StockTotal.upsert({
+//                owner: stockTotal.owner
+//            }, {
+//                $set: {
+//                    shares: stockTotal.shares,
+//                    bookValue: stockTotal.bookValue,
+//                    marketValue: stockTotal.marketValue,
+//                    profitDollars: stockTotal.profitDollars,
+//                    profitPercent: stockTotal.profitPercent
+//                }
+//            })
+            Meteor.call("updateStockTotals", owner);
             console.log("stock prices up to date");
         } else {
             StockSums.remove({owner: owner});
             StockAccounts.remove({owner: owner});
         }
         
+        return true;
+    },
+    updateStocksCron: function (owner) {
+        //UPDATE STOCK ASK PRICES FIRST
+
+        //get a list of stock symbols to get latest stock prices
+        var stockArray = [];
+        var stockObjs = [];
+        if (Stocks.findOne()) {
+            var result = Stocks.find({
+                owner: owner
+            }).fetch()
+            for (var i = 0; i < result.length; i++) {
+                stockArray.push(result[i].ticker);
+            }
+            //get latest prices
+            var res = getStockObject(stockArray);
+            for (var j = 0; j < result.length; j++) {
+                var check = result[j]._id;
+                
+                for (var k = 0; k < res.length; k++) {
+                    if (result[j].ticker == res[k].ticker) {
+                        var check2 = result[j]._id;
+                        
+                        result[j].ask = res[k].ask;
+                        //console.log(result[j].shares);
+                        result[j].marketValue = result[j].shares * res[k].ask;
+                        if(result[j].action == "Buy"){
+                            result[j].profitDollars = roundDollars(result[j].marketValue - result[j].bookValue);
+                            result[j].profitPercent = roundPercent(result[j].profitDollars / result[j].bookValue);
+                        };
+                        if(result[j].action == "Sell"){
+                            result[j].profitDollars = roundDollars(result[j].bookValue - result[j].marketValue);
+                            result[j].profitPercent = roundPercent(result[j].profitDollars / result[j].bookValue);
+                        };
+                        
+                    }
+                }
+            }
+            
+            //update Stocks in database
+            for (var i = 0; i < result.length; i++) {
+                Stocks.update({
+                    _id: result[i]._id
+                }, {
+                    $set: {
+                        ask: result[i].ask,
+                        marketValue: result[i].marketValue,
+                        profitDollars: result[i].profitDollars,
+                        profitPercent: result[i].profitPercent
+                    }
+                }, {
+                    multi: true
+                })
+                              
+            }
+        }
         return true;
     }
 });

@@ -5,12 +5,12 @@ Meteor.methods({
         var stockSums = StockSums.find({
             owner: user
         }).fetch();
-        
+
         stockSums.forEach(function (elem) {
             portfolioValue += elem.marketValue;
             totalBookValue += elem.bookValue;
         });
-        
+
         var profit = portfolioValue - totalBookValue;
         var cash = 0;
         var cashSums = CashTransactions.find({
@@ -34,15 +34,21 @@ Meteor.methods({
                 if (elem.action == "Withdrawl") {
                     profit -= elem.amount;
                 }
-                
+
             }
 
-        })       
-        
+        })
+
 
         var total = portfolioValue + cash;
         var unrealizedProfit = portfolioValue - totalBookValue;
-        var percent = roundPercent(unrealizedProfit/totalBookValue);
+        var percent = roundPercent(unrealizedProfit / totalBookValue);
+
+//        StockTotalPerformanceData.upsert({
+//            owner: user
+//        }, {
+//            
+//        })
         return {
             portfolioValue: formatDollars(portfolioValue),
             totalValue: formatDollars(total),

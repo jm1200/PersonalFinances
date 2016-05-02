@@ -14,63 +14,85 @@ SyncedCron.add({
             users.push(user._id);
         })
 
+
         //update all users totals
         for (var i = 0; i < users.length; i++) {
-            //update stocks first
-            Meteor.call("updateStocks", users[i]);
-            
-            var cash = CashTotal.findOne({owner: users[i]}).total;
-            //console.log("cash: ", cash)
 
-            var docs = Stocks.find({
-                owner: users[i]
-            }).fetch();
+            if (Stocks.findOne({
+                    owner: users[i]
+                }) || CashTransactions.findOne({
+                    owner: users[i]
+                })) {
 
-            var stockTotal = {
-                owner: users[i],
-                date: new Date,
-                shares: 0,
-                bookValue: 0,
-                marketValue: 0,
-                profitDollars: 0,
-                profitPercent: 0
-            };
 
-            docs.forEach(function (doc) {
-                stockTotal.shares += doc.shares;
-                stockTotal.bookValue += doc.bookValue;
-                stockTotal.marketValue += doc.marketValue;
 
-            });
-            stockTotal.profitDollars = roundDollars(stockTotal.marketValue - stockTotal.bookValue);
-            stockTotal.profitPercent = roundPercent((stockTotal.marketValue - stockTotal.bookValue) / stockTotal.bookValue);
-            stockTotal.total = stockTotal.marketValue + cash;
-            
-            
-            var money = stockTotal.marketValue + cash;
-            var graphData = {total: money, date: new Date()};
-            
-            PortfolioTotal.upsert({
-                owner: stockTotal.owner     
-            }, {
-                $push: {
-                    data: graphData                   
+
+
+                //get portfolioValue for each user
+                var portfolioValue = 0;
+                if (StockSums.findOne({
+                        owner: users[i]
+                    })) {
+                    //update stocks first
+                    Meteor.call("updateStocksCron", users[i]);
+
+                    var stockSums = StockSums.find({
+                        owner: users[i]
+                    }).fetch();
+
+                    stockSums.forEach(function (elem) {
+                        portfolioValue += elem.marketValue;
+                    });
+
                 }
-            })
 
-//            StockTotalPerformanceData.upsert({
-//                owner: stockTotal.owner     
-//            }, {
-//                $push: {
-//                    data: stockTotal                    
-//                }
-//            })
-            
+                //get cash Value for each user
+                var cash = 0;
+                if (CashTransactions.findOne({
+                        owner: users[i]
+                    })) {
+                    var cashSums = CashTransactions.find({
+                        owner: users[i]
+                    }).fetch();
+
+                    cashSums.forEach(function (elem) {
+                        if (elem.action == "Deposit") {
+                            cash += elem.amount;
+                        }
+                        if (elem.action == "Withdrawl") {
+                            cash -= elem.amount;
+                        }
+
+
+                    })
+                }
+
+
+
+
+                var total = portfolioValue + cash;
+                var graphData = {
+                    total: total,
+                    date: new Date()
+                };
+
+                console.log("user ", users[i]);
+                console.log("graphData ",graphData);
+                
+                StockTotalPerformanceData.upsert({owner: users[i]}, {
+                    $push: {data: {test: 30}}
+                }, function(error, res){
+                    console.log(error);
+                    console.log(res);
+                });
+
+            }
+
+
         }
-
         console.log("cron job completed");
     }
 
 });
 
-//SyncedCron.start();
+SyncedCron.start();
