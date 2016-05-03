@@ -75,15 +75,9 @@ SyncedCron.add({
                     total: total,
                     date: new Date()
                 };
-
-                console.log("user ", users[i]);
-                console.log("graphData ",graphData);
                 
                 StockTotalPerformanceData.upsert({owner: users[i]}, {
-                    $push: {data: {test: 30}}
-                }, function(error, res){
-                    console.log(error);
-                    console.log(res);
+                    $push: {data: graphData}
                 });
 
             }

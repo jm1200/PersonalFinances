@@ -33,7 +33,13 @@ Template.AddStock.events({
     },
     //update the stock tables by calling a method
     'click .update-stocks': function () {
-        Meteor.call('updateStocks', Meteor.userId());
+        Meteor.call('updateStocks', Meteor.userId(), function (error, result) {
+            if (result) {
+                Meteor.call("updateStockTotals", Meteor.userId(), function (error, result) {
+                    Session.set("totals", result);
+                })
+            }
+        });
 
     },
     'click .cash': function () {

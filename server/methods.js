@@ -63,6 +63,7 @@ Meteor.methods({
             }
         }
         Meteor.call("updateTables", owner);
+        return true;
     },
     updateTables: function (owner) {
 
@@ -103,6 +104,7 @@ Meteor.methods({
                     res[value.ticker].shares += value.shares;
                     res[value.ticker].bookValue += value.shares * value.price;
                     res[value.ticker].marketValue += value.shares * value.ask;
+                    
                 }
                 if (value.action == "Sell") {
                     res[value.ticker].shares -= value.shares;
@@ -117,7 +119,6 @@ Meteor.methods({
             //console.log(sums);
             //upsert the new stock sums data
             sums.forEach(function (obj) {
-                console.log(obj);
                 if (obj.shares == 0) {
                     StockSums.remove({
                         owner: obj.owner,
@@ -194,36 +195,6 @@ Meteor.methods({
 
             });
 
-//            var stockTotal = {
-//                owner: owner,
-//                date: new Date,
-//                shares: 0,
-//                bookValue: 0,
-//                marketValue: 0,
-//                profitDollars: 0,
-//                profitPercent: 0
-//            };
-//
-//            docs.forEach(function (doc) {
-//                stockTotal.shares += doc.shares;
-//                stockTotal.bookValue += doc.bookValue;
-//                stockTotal.marketValue += doc.marketValue;
-//
-//            });
-//            stockTotal.profitDollars = roundDollars(stockTotal.marketValue - stockTotal.bookValue);
-//            stockTotal.profitPercent = roundPercent((stockTotal.marketValue - stockTotal.bookValue) / stockTotal.bookValue);
-//
-//            StockTotal.upsert({
-//                owner: stockTotal.owner
-//            }, {
-//                $set: {
-//                    shares: stockTotal.shares,
-//                    bookValue: stockTotal.bookValue,
-//                    marketValue: stockTotal.marketValue,
-//                    profitDollars: stockTotal.profitDollars,
-//                    profitPercent: stockTotal.profitPercent
-//                }
-//            })
             Meteor.call("updateStockTotals", owner);
             console.log("stock prices up to date");
         } else {
@@ -256,6 +227,7 @@ Meteor.methods({
                         var check2 = result[j]._id;
                         
                         result[j].ask = res[k].ask;
+                        //console.log("new stock price for " + res[k].ticker + " is " + res[k].ask)
                         //console.log(result[j].shares);
                         result[j].marketValue = result[j].shares * res[k].ask;
                         if(result[j].action == "Buy"){
@@ -287,6 +259,7 @@ Meteor.methods({
                 })
                               
             }
+            Meteor.call("updateStockTotals", owner);
         }
         return true;
     }

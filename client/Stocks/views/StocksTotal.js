@@ -22,8 +22,6 @@ Template.StocksTotal.helpers({
                 return data[i] = [Date.parse(elem.date), elem.total];
             });
 
-            console.log(data);
-
             var graph = function (data) {
                 return {
                     chart: {
