@@ -29,8 +29,18 @@ Template.StocksMain.events({
 Template.StocksMain.helpers({
     stock: function () {
         return Session.get('stock');
+    },
+    helpDivToggle: function(){
+        if(Stocks.findOne({owner: Meteor.userId()})){
+            return false;
+        } else {
+            return true;
+        }
+        
     }
 })
+
+
 
 
 

@@ -19,7 +19,7 @@ Template.StocksTotal.helpers({
 
 
             result.map(function (elem, i) {
-                return data[i] = [Date.parse(elem.date), elem.total];
+                return data[i] = [Date.parse(elem.date), roundDollars(elem.total)];
             });
 
             var graph = function (data) {
@@ -46,7 +46,7 @@ Template.StocksTotal.helpers({
                         }, 0);
                     },
                     title: {
-                        text: "Total Value Over Time"
+                        text: "Total Portfolio Value Over Time"
                     },
 
                     xAxis: {

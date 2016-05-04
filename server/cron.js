@@ -3,8 +3,8 @@ SyncedCron.add({
     schedule: function (parser) {
         // parser is a later.parse object
         //return parser.text('at 5:30pm');
-        //return parser.text('every 1 minute');
-        return parser.text('every weekday every 1 hours after 9:00am before 6:00pm');
+        return parser.text('every 1 minute');
+        //return parser.text('every weekday every 1 hours after 9:00am before 6:00pm');
     },
     job: function () {
         //get array of users

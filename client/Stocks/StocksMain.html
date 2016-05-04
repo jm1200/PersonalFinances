@@ -1,13 +1,14 @@
 <template name="StocksMain">
     <div class="container">
-        {{>DetailsModals}}
-        
-
-        <!--  Portfolio Summary Section-->
+        {{>DetailsModals}} {{#if helpDivToggle}}
+        <div class="row">
+            {{> HelpDiv}}
+        </div>
+        {{else}}
         <div class="row">
             {{>StocksTotal}}
         </div>
-
+        {{/if}}
 
         <!--  Portfolio Buttons and Tools-->
         <div class="row">
@@ -22,11 +23,28 @@
 
         </div>
 
-        <!--  Graphs-->
+
         <div class="row">
 
-            
+
 
         </div>
+    </div>
+</template>
+
+
+<template name="HelpDiv">
+    <div>
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <h3 class="panel-title">Instructions</h3>
+            </div>
+            <div class="panel-body">
+                <h3>Step 1</h3><p class="steps">- Fund your account! Deposit money.</p>
+                <h3>Step 2</h3><p class="steps">- Buy a stock!</p>
+                <h3>Step 3</h3><p class="steps">- Update stocks to manually update your stocks!</p>
+            </div>
+        </div>
+
     </div>
 </template>

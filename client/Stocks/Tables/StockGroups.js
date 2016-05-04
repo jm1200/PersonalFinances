@@ -9,7 +9,7 @@ Template.StockGroups.helpers({
                     return data[i] = [elem.ticker, elem.marketValue]
                 });
                 
-                console.log(data);
+                
                 
                 var graph = function (data, title) {
                     return {
@@ -46,7 +46,7 @@ Template.StockGroups.helpers({
                         }]
                     };
                 }
-                console.log(graph(data, "Stocks Summary"));
+                
                 return graph(data, "Stocks Summary");
 
 
