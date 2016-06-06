@@ -102,7 +102,8 @@ Meteor.methods({
             bookValue: formatDollars(totalBookValue),
             marketValue: formatDollars(portfolioValue),
             profitDollars: formatDollars(unrealizedProfit),
-            profitPercent: percent + "%"
+            profitPercent: percent + "%",
+            cashInt: cash
         }
     }
 })

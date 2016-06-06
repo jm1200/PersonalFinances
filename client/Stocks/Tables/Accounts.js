@@ -11,6 +11,8 @@ Template.Accounts.helpers({
                     for (var i = 0; i < results.length; i++) {
                         data.push([results[i].account, results[i].marketValue]);
                     }
+                    var cash = Session.get("totals").cashInt;
+                    data.push(["cash", cash]);
                     return data;
                 }
             }

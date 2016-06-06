@@ -1,6 +1,10 @@
 <template name="CashTransactions">
    <h2>Cash Transactions</h2>
     {{>ColumnVisSel}}
-
      {{> tabular id="table3" table=TabularTables.CashTransactions class="table table-striped table-bordered table-condensed"}}
+</template>
+
+<template name="StockTransactions">
+    <h2>Stock Transactions</h2>
+         {{> tabular id="table" table=TabularTables.Stocks class="table table-striped table-bordered table-condensed"}}
 </template>

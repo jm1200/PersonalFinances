@@ -1,20 +1,21 @@
 <template name="StocksMain">
     <div class="container">
-            <div class="row">
-                {{>StocksNav}}
-            </div>
-        {{>DetailsModals}} {{#if helpDivToggle}}
-            <div class="row">
-                {{> HelpDiv}}
-            </div>
-        {{else}}
-            <div class="row">
-                {{#if $.Session.get 'table'}} {{> AllStocks}} {{/if}} 
-                {{#if $.Session.get 'table1'}} {{> StockGroups}} {{/if}} 
-                {{#if $.Session.get 'table2'}} {{> Accounts}} {{/if}} 
-                {{#if $.Session.get 'table3'}} {{> CashTransactions}} {{/if}} 
-            </div>
+        {{#if currentUser}}
+        <div class="row">
+            {{>StocksNav}}
+        </div>
+        {{>DetailsModals}} 
+            {{#if helpDivToggle}}
+                <div class="row">
+                    {{> HelpDiv}}
+                </div>
+            {{else}}
+                <div class="row">
+                    {{#if $.Session.get 'table'}} {{> AllStocks}} {{/if}} {{#if $.Session.get 'table1'}} {{> StockGroups}} {{/if}} {{#if $.Session.get 'table2'}} {{> Accounts}} {{/if}} {{#if $.Session.get 'table3'}} {{> CashTransactions}} {{>StockTransactions}} {{/if}}
+                </div>
+            {{/if}} 
         {{/if}}
+
     </div>
 </template>
 

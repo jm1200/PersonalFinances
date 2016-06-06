@@ -1,6 +1,7 @@
 Template.StockGroups.helpers({
     graph: function () {
             //Get data for all accounts pie chart
+            var cash = Session.get("totals").cashInt;
             if (StockSums.findOne()) {
                 var data = [];
                 var result = StockSums.find({
@@ -8,6 +9,9 @@ Template.StockGroups.helpers({
                 }).fetch().map(function (elem, i) {
                     return data[i] = [elem.ticker, elem.marketValue]
                 });
+                
+                data.push(["cash", cash]);
+                
                 
                 
                 
