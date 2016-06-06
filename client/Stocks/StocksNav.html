@@ -1,0 +1,45 @@
+<template name="StocksNav">
+    <div class="row">
+        <div class="col-md-6">
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Tools</h3>
+                </div>
+
+                <div class="panel-body">
+                    <div class="container">
+                        <div class="row center-block">
+                            {{>AddStock}}
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Views</h3>
+                </div>
+
+                <div class="panel-body">
+                    <div class="container">
+                        <div class="row center-block">
+<!--                            <div class="text-center">-->
+                                <button class="btn btn-primary overview">Overview</button>
+                                <button class="btn btn-primary sortByStock">Sort by Stock</button>
+                                <button class="btn btn-primary sortByAccount">Sort by Account</button>
+                                <button class="btn btn-primary transactions">Transactions</button>
+<!--                            </div>-->
+
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+
+    </div>
+
+</template>

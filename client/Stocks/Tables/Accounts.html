@@ -1,15 +1,16 @@
 <template name="Accounts">
-   <h2>Sorted by Accounts</h2>
-    {{>ColumnVisSel}}
+    {{#each graphs}} 
+        {{> highchartsHelper chartId=graphId chartWidth="100%" charHeight="100%" chartObject=chartObject}} 
+    {{/each}}
+    
+    <h2>Sorted by Accounts</h2> 
+    {{>ColumnVisSel}} 
     
     {{> tabular id="table2" table=TabularTables.StockAccounts class="table table-striped table-bordered table-condensed"}}
-    
-    
-    {{#each graphs}}
-        {{> highchartsHelper chartId=graphId chartWidth="100%" charHeight="100%" chartObject=chartObject}}
 
-    {{/each}}
-        
-    
-    
+
+
+
+
+
 </template>
