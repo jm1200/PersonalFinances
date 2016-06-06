@@ -3,9 +3,9 @@ SyncedCron.add({
     schedule: function (parser) {
         // parser is a later.parse object
         //return parser.text('at 5:30pm');
-        //return parser.text('every 1 minute');
+        return parser.text('every 1 minute');
         //adjust for UTC
-        return parser.text('every weekday every 1 hours after 1:00pm before 10:00pm');
+        //return parser.text('every weekday every 1 hours after 1:00pm before 10:00pm');
     },
     job: function () {
         //get array of users
@@ -31,6 +31,8 @@ SyncedCron.add({
 
                 //get portfolioValue for each user
                 var portfolioValue = 0;
+                var bookValue = 0;
+                
                 if (StockSums.findOne({
                         owner: users[i]
                     })) {
@@ -42,7 +44,9 @@ SyncedCron.add({
                     }).fetch();
 
                     stockSums.forEach(function (elem) {
+                        console.log
                         portfolioValue += elem.marketValue;
+                        bookValue += elem.bookValue;
                     });
 
                 }
@@ -67,7 +71,8 @@ SyncedCron.add({
 
                     })
                 }
-
+                
+               
 
 
 
@@ -76,9 +81,23 @@ SyncedCron.add({
                     total: total,
                     date: new Date()
                 };
+                var marketValueData = {
+                    total: portfolioValue,
+                    date: new Date()
+                };
+                var bookValueData = {
+                    total: bookValue,
+                    date: new Date()
+                };
                 
                 StockTotalPerformanceData.upsert({owner: users[i]}, {
                     $push: {data: graphData}
+                });
+                 StockTotalPerformanceData.upsert({owner: users[i]}, {
+                    $push: {marketValue: marketValueData}
+                });
+                StockTotalPerformanceData.upsert({owner: users[i]}, {
+                    $push: {bookValue: bookValueData}
                 });
 
             }
