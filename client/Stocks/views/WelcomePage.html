@@ -1,0 +1,92 @@
+<template name="StocksWelcomePage">
+    <div class="container">
+        <div class="center-title">
+            <h2>Sign up for free or log in to start using these tools to track the performance of your stock portfolio!</h2>
+        </div>
+        <br />
+        <h4>Features include:</h4>
+        <div class="row border-top">
+            <div class="col-md-6">
+                <img class="preview" src="totals.png" alt="">
+                <p class="text-center">click to enlarge</p>
+            </div>
+            <div class="col-md-6 center">
+                <h4>Track your portfolio value, market value and book value over time and get a clear picture of how your investments are doing.</h4>
+            </div>
+        </div>
+
+        <div class="row border-top">
+            <div class="col-md-6 center">
+                <h4>See all of your accounts to keep track of your different investing strategies and distributions.</h4>
+            </div>
+            <div class="col-md-6">
+                <img class="preview" src="Accounts.png" alt="">
+                <p class="text-center">click to enlarge</p>
+            </div>
+        </div>
+
+        <div class="row border-top">
+            <div class="col-md-6">
+                <img class="preview" src="accountdetails.png" alt="">
+                <p class="text-center">click to enlarge</p>
+            </div>
+            <div class="col-md-6 center">
+                <h4>Get a detailed look inside each account to check your distributions.</h4>
+            </div>
+        </div>
+
+        <div class="row border-top">
+            <div class="col-md-6 center">
+                <h4>See all of your stock purchases grouped together and analyse your distribution and market timing</h4>
+            </div>
+            <div class="col-md-6">
+                <img class="preview" src="Stocks.png" alt="">
+                <p class="text-center">click to enlarge</p>
+            </div>
+        </div>
+
+        <div class="row border-top">
+            <div class="col-md-6">
+                <img class="preview" src="stockdetails.png" alt="">
+                <p class="text-center">click to enlarge</p>
+            </div>
+            <div class="col-md-6 center">
+                <h4>Get a detailed look at each time you have purchased a specific stock. Compare it with the current price to get a general idea for timing the market.</h4>
+            </div>
+        </div>
+
+        <div class="row border-top">
+            <div class="col-md-6 center">
+                <h4>Get the history and details for each time you purchased a stock</h4>
+            </div>
+            <div class="col-md-6">
+                <img class="preview" src="table.png" alt="">
+                <p class="text-center">click to enlarge</p>
+            </div>
+        </div>
+    </div>
+
+    <!--Image preview MODAL-->
+    <div id="previewImage" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-body center">
+
+                    <img class="big-image" src="{{image}}" alt="">
+                </div>
+                <div class="modal-footer">
+
+                    <button type="submit" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+</template>
+
+
+<template name="imagePreviewModal">
+
+</template>

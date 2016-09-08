@@ -2,6 +2,28 @@
     font-size: 1.5em;
     display: inline;
 }
-h3 {
-   
+
+h3 {}
+
+.preview {
+    max-height: 300px;
+}
+
+.big-image {
+    max-height: 500px;
+}
+
+.border-top {
+    border-top: 1px solid gray;
+    margin-top: 30px;
+    padding-top: 20px;
+}
+.center {
+    align-content: center;
+    margin-top: 120px;
+    text-align: center;
+}
+.center-title {
+    align-content: center;
+    text-align: center;
 }
